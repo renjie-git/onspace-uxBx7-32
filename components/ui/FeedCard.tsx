@@ -37,8 +37,14 @@ export function FeedCard({ post }: FeedCardProps) {
     setIsLiked(!isLiked);
   };
 
+  const handleCardPress = () => {
+    // Navigate to post detail page
+    const { router } = require('expo-router');
+    router.push(`/post/${post.id}`);
+  };
+
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={handleCardPress}>
       {/* Main Image */}
       <View style={styles.imageContainer}>
         <Image
@@ -57,7 +63,10 @@ export function FeedCard({ post }: FeedCardProps) {
         {/* Like Button Overlay */}
         <TouchableOpacity
           style={styles.likeButton}
-          onPress={handleLike}
+          onPress={(e) => {
+            e.stopPropagation();
+            handleLike();
+          }}
         >
           <MaterialIcons
             name={isLiked ? 'favorite' : 'favorite-border'}
