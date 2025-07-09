@@ -6,12 +6,11 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
-const cardWidth = width - 32;
+const cardWidth = (width - 48) / 2; // Two columns with spacing
 
 interface Post {
   id: string;
@@ -33,205 +32,145 @@ interface FeedCardProps {
 
 export function FeedCard({ post }: FeedCardProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
 
   return (
-    <View style={styles.card}>
-      {/* User Header */}
-      <View style={styles.userHeader}>
-        <View style={styles.userInfo}>
-          <Image source={{ uri: post.user.avatar }} style={styles.userAvatar} />
-          <View style={styles.userDetails}>
-            <Text style={styles.userName}>{post.user.name}</Text>
-            <Text style={styles.location}>{post.location}</Text>
-          </View>
-        </View>
-        <TouchableOpacity>
-          <MaterialIcons name="more-horiz" size={24} color="#666" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Images */}
+    <TouchableOpacity style={styles.card}>
+      {/* Main Image */}
       <View style={styles.imageContainer}>
-        <ScrollView
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={(event) => {
-            const index = Math.round(event.nativeEvent.contentOffset.x / cardWidth);
-            setCurrentImageIndex(index);
-          }}
-        >
-          {post.images.map((image, index) => (
-            <Image
-              key={index}
-              source={{ uri: image }}
-              style={styles.postImage}
-              resizeMode="cover"
-            />
-          ))}
-        </ScrollView>
+        <Image
+          source={{ uri: post.images[0] }}
+          style={styles.postImage}
+          resizeMode="cover"
+        />
         
-        {/* Image Indicators */}
+        {/* Multiple Images Indicator */}
         {post.images.length > 1 && (
-          <View style={styles.imageIndicators}>
-            {post.images.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.indicator,
-                  index === currentImageIndex && styles.activeIndicator,
-                ]}
-              />
-            ))}
+          <View style={styles.multiImageIndicator}>
+            <MaterialIcons name="photo-library" size={16} color="white" />
           </View>
         )}
+        
+        {/* Like Button Overlay */}
+        <TouchableOpacity
+          style={styles.likeButton}
+          onPress={handleLike}
+        >
+          <MaterialIcons
+            name={isLiked ? 'favorite' : 'favorite-border'}
+            size={18}
+            color={isLiked ? '#ff2442' : 'white'}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Content */}
       <View style={styles.content}>
-        <Text style={styles.title}>{post.title}</Text>
-        <Text style={styles.description} numberOfLines={3}>
-          {post.content}
+        <Text style={styles.title} numberOfLines={2}>
+          {post.title}
         </Text>
-      </View>
-
-      {/* Actions */}
-      <View style={styles.actions}>
-        <View style={styles.leftActions}>
-          <TouchableOpacity style={styles.actionButton} onPress={handleLike}>
-            <MaterialIcons
-              name={isLiked ? 'favorite' : 'favorite-border'}
-              size={22}
-              color={isLiked ? '#ff2442' : '#666'}
-            />
-            <Text style={[styles.actionText, isLiked && styles.likedText]}>
-              {post.likes + (isLiked ? 1 : 0)}
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.actionButton}>
-            <MaterialIcons name="chat-bubble-outline" size={22} color="#666" />
-            <Text style={styles.actionText}>{post.comments}</Text>
-          </TouchableOpacity>
+        
+        {/* User Info */}
+        <View style={styles.userInfo}>
+          <Image source={{ uri: post.user.avatar }} style={styles.userAvatar} />
+          <Text style={styles.userName} numberOfLines={1}>
+            {post.user.name}
+          </Text>
         </View>
         
-        <TouchableOpacity style={styles.actionButton}>
-          <MaterialIcons name="bookmark-border" size={22} color="#666" />
-        </TouchableOpacity>
+        {/* Stats */}
+        <View style={styles.stats}>
+          <View style={styles.statItem}>
+            <MaterialIcons name="favorite" size={12} color="#ff2442" />
+            <Text style={styles.statText}>{post.likes}</Text>
+          </View>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
-    marginHorizontal: 16,
-    marginBottom: 16,
     borderRadius: 12,
     overflow: 'hidden',
+    marginBottom: 16,
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    width: cardWidth,
   },
-  userHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  imageContainer: {
+    position: 'relative',
+    aspectRatio: 0.75, // 3:4 ratio for vertical images
+  },
+  postImage: {
+    width: '100%',
+    height: '100%',
+  },
+  multiImageIndicator: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+  },
+  likeButton: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 20,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 12,
+  },
+  content: {
+    padding: 8,
+  },
+  title: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#333',
+    lineHeight: 18,
+    marginBottom: 8,
   },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  userAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 12,
-  },
-  userDetails: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#333',
-  },
-  location: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 2,
-  },
-  imageContainer: {
-    position: 'relative',
-  },
-  postImage: {
-    width: cardWidth,
-    height: 300,
-  },
-  imageIndicators: {
-    position: 'absolute',
-    bottom: 12,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  indicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    marginHorizontal: 3,
-  },
-  activeIndicator: {
-    backgroundColor: 'white',
-  },
-  content: {
-    padding: 12,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
     marginBottom: 6,
   },
-  description: {
-    fontSize: 14,
+  userAvatar: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    marginRight: 6,
+  },
+  userName: {
+    fontSize: 11,
     color: '#666',
-    lineHeight: 20,
+    flex: 1,
   },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingBottom: 12,
-  },
-  leftActions: {
+  stats: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  actionButton: {
+  statItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 20,
   },
-  actionText: {
-    fontSize: 13,
+  statText: {
+    fontSize: 11,
     color: '#666',
-    marginLeft: 4,
-  },
-  likedText: {
-    color: '#ff2442',
+    marginLeft: 2,
   },
 });
