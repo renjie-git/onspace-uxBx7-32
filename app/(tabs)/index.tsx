@@ -23,11 +23,11 @@ const mockPosts = [
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b5c5?w=150&h=150&fit=crop&crop=face',
     },
     images: [
-      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=300&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=600&fit=crop',
     ],
-    title: 'Cozy Coffee Shop Downtown ☕️',
-    content: 'Found this amazing little coffee shop with perfect ambiance for working!',
+    title: 'Cozy Coffee Shop in Downtown ☕️',
+    content: 'Found this amazing little coffee shop with the perfect ambiance for working. Their latte art is absolutely stunning! 🎨 #coffee #worklife #cozy',
     likes: 234,
     comments: 12,
     location: 'Downtown Coffee House',
@@ -39,10 +39,10 @@ const mockPosts = [
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
     },
     images: [
-      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=600&fit=crop',
     ],
     title: 'Homemade Pasta Night 🍝',
-    content: 'Fresh pasta from scratch with grandmother\'s recipe!',
+    content: 'Spent the evening making fresh pasta from scratch. The sauce recipe is from my grandmother - pure comfort food! Who else loves cooking Italian?',
     likes: 189,
     comments: 8,
     location: 'Home Kitchen',
@@ -54,60 +54,14 @@ const mockPosts = [
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     },
     images: [
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1418985991508-e47386d96a71?w=300&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1418985991508-e47386d96a71?w=400&h=600&fit=crop',
     ],
     title: 'Mountain Adventure Weekend 🏔️',
-    content: 'Breathtaking views from the summit! Nature therapy at its finest.',
+    content: 'Hiking through the national park this weekend. The view from the summit was absolutely breathtaking! Nature therapy at its finest.',
     likes: 456,
     comments: 23,
     location: 'Rocky Mountain National Park',
-  },
-  {
-    id: '4',
-    user: {
-      name: 'Lisa Zhang',
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face',
-    },
-    images: [
-      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=400&fit=crop',
-    ],
-    title: 'Evening Skincare Routine ✨',
-    content: 'My favorite products for glowing skin!',
-    likes: 678,
-    comments: 34,
-    location: 'Home',
-  },
-  {
-    id: '5',
-    user: {
-      name: 'Mike Johnson',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-    },
-    images: [
-      'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=300&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=400&fit=crop',
-    ],
-    title: 'Morning Yoga Session 🧘‍♂️',
-    content: 'Starting the day with mindfulness and movement.',
-    likes: 345,
-    comments: 15,
-    location: 'Home Studio',
-  },
-  {
-    id: '6',
-    user: {
-      name: 'Anna Wilson',
-      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop&crop=face',
-    },
-    images: [
-      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=300&h=400&fit=crop',
-    ],
-    title: 'Minimalist Home Decor 🏠',
-    content: 'Simple and clean aesthetic for peaceful living.',
-    likes: 890,
-    comments: 42,
-    location: 'Home',
   },
 ];
 
@@ -162,11 +116,9 @@ export default function HomeScreen() {
 
         {/* Feed */}
         <View style={styles.feedContainer}>
-          <View style={styles.feedGrid}>
-            {mockPosts.map((post) => (
-              <FeedCard key={post.id} post={post} />
-            ))}
-          </View>
+          {mockPosts.map((post) => (
+            <FeedCard key={post.id} post={post} />
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -243,11 +195,5 @@ const styles = StyleSheet.create({
   },
   feedContainer: {
     paddingTop: 8,
-    paddingHorizontal: 16,
-  },
-  feedGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
   },
 });
