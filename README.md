@@ -1,4 +1,4 @@
-# Little Red Book - Social Sharing App - xiao hong shu
+# Little Red Book - Social Sharing App
 
 A beautiful social media application inspired by Xiaohongshu (Little Red Book), built with React Native and Expo. This app allows users to share lifestyle content, discover new trends, and connect with others through photos and stories.
 
